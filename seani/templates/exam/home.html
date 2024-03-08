@@ -4,8 +4,9 @@
 <p>{{ user.last_name }}</p>
 <p>{{ user.email }}</p>
 
-<p>{{ user.exam.modules.all }}</p>
-<p>{{ user.exam.questions.all }}</p>
+{% for module in user.exam.modules.all %}
+<a href="{% url 'exam:question' module.id %}">{{ module }}</a>
+{% endfor %}
 
 <form action="{% url 'logout' %}" method="POST">
     {% csrf_token %}

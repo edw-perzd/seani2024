@@ -9,6 +9,10 @@ def home(request):
     user = request.user
     return render(request, 'exam/home.html', {'user': user})
 
+def question(request, m_id, q_id = 1):
+    module = request.user.exam.modules.get(id=m_id)
+    
+
 def add_candidate(request):
     if request.method == 'POST':
         form = CandidateForm(request.POST)
