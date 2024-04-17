@@ -26,15 +26,22 @@ def question(request, m_id, q_id = 1):
         return redirect('exam:question', m_id, q_id + 1)
     try:
         questions = exam.breakdown_set.filter(question__module_id = m_id)
-        question =  questions[q_id - 1].question
-        answer = questions[q_id - 1 ].answer
-        return render(request, 'exam/question.html', {
-            'question': question,
-            'answer': answer,
-            'm_id': m_id,
-            'q_id': q_id
-            })
+        if questions:
+            question =  questions[q_id - 1].question
+            answer = questions[q_id - 1 ].answer
+            return render(request, 'exam/question.html', {
+                'question': question,
+                'answer': answer,
+                'm_id': m_id,
+                'q_id': q_id
+                })
+        else:
+            return redirect('exam:home')
     except IndexError:
+        exam.compute_score_by_module(m_id)
+        exam.compute_score()
+        return redirect('exam:home')
+    except ValueError:
         return redirect('exam:home')
     
 @login_required
